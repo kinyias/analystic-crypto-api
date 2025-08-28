@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-73zba#rx8bdl*fpz+c7dt0@k8d%vp2+kr)_hr8@#6%8%m9d)qe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['analystic-crypto-api.onrender.com']
+ALLOWED_HOSTS = ['analystic-crypto-api.onrender.com','127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -37,6 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework', 
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'channels', 
+    'corsheaders', 
+    'api.market_data',
 ]
 
 MIDDLEWARE = [
@@ -47,8 +57,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+     "allauth.account.middleware.AccountMiddleware",
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'website.urls'
 
 TEMPLATES = [
@@ -102,7 +114,24 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',  # default
+    'allauth.account.auth_backends.AuthenticationBackend',  # allauth
+)
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': config("CLIENT_ID"),
+            'secret': config("CLIENT_SECRET"),
+            'key': ""
+        }
+    }
+}
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
